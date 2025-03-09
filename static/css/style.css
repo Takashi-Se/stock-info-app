@@ -1,0 +1,358 @@
+/* 基本スタイル */
+* {
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    line-height: 1.6;
+    color: #333;
+    background-color: #f5f5f5;
+    padding: 10px;
+}
+
+#app {
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+header {
+    background-color: #4a86e8;
+    color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+h1 {
+    font-size: 1.5rem;
+    font-weight: bold;
+}
+
+/* 検索エリア */
+.search-area {
+    background-color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+.search-area label {
+    margin-right: 10px;
+}
+
+.search-area input {
+    padding: 8px;
+    width: 100px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-right: 10px;
+}
+
+button {
+    padding: 8px 15px;
+    background-color: #4a86e8;
+    color: white;
+    border: none;
+    border-radius: 3px;
+    cursor: pointer;
+}
+
+button:hover {
+    background-color: #3a76d8;
+}
+
+/* 株価情報エリア */
+.stock-info {
+    background-color: white;
+    padding: 15px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.info-row {
+    display: flex;
+    align-items: center;
+    margin-bottom: 10px;
+    flex-wrap: wrap;
+}
+
+.info-row label {
+    width: 60px;
+    margin-right: 10px;
+}
+
+.fav-button {
+    margin-left: 15px;
+    background-color: #4caf50;
+}
+
+.link-buttons {
+    display: flex;
+    gap: 10px;
+    margin-top: 10px;
+    flex-wrap: wrap;
+}
+
+.button {
+    padding: 8px 15px;
+    background-color: #f5f5f5;
+    color: #333;
+    text-decoration: none;
+    border-radius: 3px;
+    display: inline-block;
+    text-align: center;
+}
+
+.mini-button {
+    padding: 4px 8px;
+    background-color: #f5f5f5;
+    color: #333;
+    text-decoration: none;
+    border-radius: 3px;
+    display: inline-block;
+    text-align: center;
+    font-size: 0.8rem;
+}
+
+/* お気に入りエリア */
+.favorites-area {
+    background-color: white;
+    border-radius: 5px;
+    margin-bottom: 15px;
+}
+
+.tabs {
+    display: flex;
+    background-color: #e0e0e0;
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    overflow-x: auto;
+}
+
+.tabs button {
+    padding: 10px 15px;
+    background-color: transparent;
+    color: #333;
+    border: none;
+    cursor: pointer;
+    white-space: nowrap;
+}
+
+.tabs button.active {
+    background-color: #4a86e8;
+    color: white;
+}
+
+.tabs button.add-tab {
+    background-color: #4caf50;
+    color: white;
+    margin-left: auto;
+}
+
+.sort-row {
+    display: flex;
+    align-items: center;
+    padding: 10px;
+    background-color: #f0f0f0;
+    flex-wrap: wrap;
+}
+
+.sort-row label {
+    margin-right: 10px;
+}
+
+.sort-row select {
+    padding: 5px;
+    border: 1px solid #ccc;
+    border-radius: 3px;
+    margin-right: auto;
+}
+
+.edit-button {
+    background-color: #f0f0f0;
+    color: #333;
+    margin-top: 5px;
+}
+
+.edit-button.active {
+    background-color: #f0ad4e;
+    color: white;
+}
+
+.favorites-table {
+    width: 100%;
+    border-collapse: collapse;
+}
+
+.favorites-table th,
+.favorites-table td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #eee;
+}
+
+.favorites-table th {
+    background-color: #f0f0f0;
+    position: sticky;
+    top: 0;
+}
+
+.favorites-table td.right {
+    text-align: right;
+}
+
+.favorites-table .up {
+    color: #e74c3c;
+}
+
+.favorites-table .down {
+    color: #2ecc71;
+}
+
+.favorites-table .delete-button {
+    background-color: #f44336;
+    padding: 4px 8px;
+    font-size: 0.8rem;
+}
+
+/* ステータスバー */
+.status-bar {
+    background-color: #eeeeee;
+    padding: 5px 10px;
+    border-radius: 3px;
+    font-size: 0.9rem;
+    color: #666;
+}
+
+/* モバイル向けレスポンシブ対応 */
+@media (max-width: 768px) {
+    /* 全体のスタイル調整 */
+    body {
+        padding: 5px;
+    }
+    
+    h1 {
+        font-size: 1.2rem;
+    }
+    
+    /* 検索エリア */
+    .search-area {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .search-area label {
+        margin-bottom: 5px;
+    }
+    
+    .search-area input,
+    .search-area button {
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        margin-right: 0;
+    }
+    
+    /* 株価情報エリア */
+    .stock-info {
+        padding: 10px;
+    }
+    
+    /* 会社名と証券コードを1行に */
+    .info-row.company-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .info-row.company-row label {
+        width: auto;
+        margin-right: 5px;
+    }
+    
+    .info-row.company-row .code-display {
+        margin-right: 5px;
+        font-weight: bold;
+    }
+    
+    /* 株価と前日比を1行に */
+    .info-row.price-row {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .info-row.price-row label {
+        width: auto;
+        margin-right: 5px;
+    }
+    
+    /* 外部サイトリンクを1行に */
+    .info-row.external-links {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+    }
+    
+    .info-row.external-links label {
+        width: auto;
+        margin-right: 5px;
+    }
+    
+    /* お気に入りボタンを調整 */
+    .fav-button {
+        margin-left: auto;
+        font-size: 0.8rem;
+        padding: 5px 8px;
+    }
+    
+    /* テーブル調整 */
+    .favorites-table {
+        display: block;
+        overflow-x: auto;
+    }
+    
+    .favorites-table th,
+    .favorites-table td {
+        padding: 8px 5px;
+        font-size: 0.9rem;
+    }
+    
+    /* タブエリア調整 */
+    .tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .tabs button {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+    
+    .sort-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .sort-row select {
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    
+    .edit-button {
+        width: 100%;
+    }
+    
+    /* リンクボタン調整 */
+    .button, .mini-button {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+}

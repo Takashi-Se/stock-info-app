@@ -1,0 +1,302 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <title>株価情報アプリ</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style_mobile.css') }}">
+    <style>
+        [v-cloak] { display: none; }
+        
+        /* スマホ向けスタイル - インライン定義 */
+        @media (max-width: 768px) {
+            /* 検索エリア */
+            .search-area {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .search-area label {
+                margin-bottom: 5px;
+            }
+            
+            .search-area input,
+            .search-area button {
+                width: 100%;
+                margin-top: 5px;
+                margin-bottom: 5px;
+                margin-right: 0;
+            }
+            
+            /* 株価情報エリア */
+            .info-row {
+                display: block;
+                margin-bottom: 10px;
+            }
+            
+            /* 会社名と証券コードを1行に */
+            .company-row {
+                display: flex !important;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+            
+            .company-row label {
+                width: auto;
+                margin-right: 5px;
+            }
+            
+            .company-row .code-display {
+                margin-right: 5px;
+                font-weight: bold;
+            }
+            
+            .company-row .fav-button {
+                margin-left: auto;
+                font-size: 0.8rem;
+                padding: 5px 8px;
+            }
+            
+            /* 株価と前日比を1行に */
+            .price-row {
+                display: flex !important;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+            
+            .price-row label {
+                width: auto;
+                margin-right: 5px;
+            }
+            
+            /* 外部サイトリンクを1行に */
+            .external-links {
+                display: flex !important;
+                flex-wrap: wrap;
+                align-items: center;
+            }
+            
+            .external-links label {
+                width: auto;
+                margin-right: 5px;
+            }
+            
+            /* テーブル調整 */
+            /* モバイル用テーブル変換 */
+            .favorites-table {
+                display: block;
+            }
+            
+            .favorites-table thead {
+                display: none; /* ヘッダー非表示 */
+            }
+            
+            .favorites-table tbody {
+                display: block;
+            }
+            
+            .favorites-table tr {
+                display: block;
+                margin-bottom: 15px;
+                border: 1px solid #eee;
+                border-radius: 5px;
+                padding: 10px;
+                background-color: #fafafa;
+            }
+            
+            .favorites-table td {
+                display: block;
+                border: none;
+                padding: 3px 10px;
+                text-align: left !important;
+            }
+            
+            /* 3行構造の調整 */
+            /* 1行目: 証券コード + 会社名 */
+            .favorites-table td:nth-child(1), /* ドラッグハンドル */
+            .favorites-table td:nth-child(2), /* 証券コード */
+            .favorites-table td:nth-child(3) { /* 会社名 */
+                display: inline-block;
+            }
+            
+            .favorites-table td:nth-child(1) {
+                width: 20px;
+                padding-left: 0;
+            }
+            
+            .favorites-table td:nth-child(2) {
+                font-weight: bold;
+                margin-right: 5px;
+            }
+            
+            /* 2行目: 現在値 + 前日比 */
+            .favorites-table td:nth-child(4), /* 現在値 */
+            .favorites-table td:nth-child(5), /* 前日比 */
+            .favorites-table td:nth-child(6) { /* 前日比% */
+                display: inline-block;
+            }
+            
+            .favorites-table td:nth-child(4):before {
+                content: "現在値: ";
+            }
+            
+            .favorites-table td:nth-child(5):before {
+                content: "前日比: ";
+                margin-left: 10px;
+            }
+            
+            /* 3行目: 外部サイト */
+            .favorites-table td:nth-child(7) {
+                display: block;
+                margin-top: 5px;
+            }
+            
+            .favorites-table td:nth-child(7):before {
+                content: "外部サイト: ";
+                display: inline-block;
+                margin-bottom: 5px;
+            }
+            
+            .favorites-table .link-buttons {
+                display: inline-block;
+            }
+            
+            /* タブ調整 */
+            .tabs {
+                overflow-x: auto;
+            }
+            
+            .sort-row {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+            
+            .sort-row select,
+            .sort-row .edit-button {
+                width: 100%;
+                margin-top: 5px;
+            }
+        }
+    </style>
+</head>
+<body>
+    {% raw %}
+    <div id="app" v-cloak>
+        <header>
+            <h1>株価情報アプリ</h1>
+        </header>
+
+        <div class="search-area">
+            <label for="code">証券コード:</label>
+            <input type="text" id="code" v-model="code" placeholder="例：7203" @keyup.enter="searchStock">
+            <button @click="searchStock">検索</button>
+        </div>
+
+        <div class="stock-info" v-if="stock">
+            <!-- 会社名と証券コードを1行に -->
+            <div class="info-row company-row">
+                <label>証券コード</label>
+                <span class="code-display">{{ stock.code }}</span>
+                <span>{{ stock.name }}</span>
+                <button @click="addToFavorites" class="fav-button">+ お気に入り</button>
+            </div>
+            
+            <!-- 株価と前日比を1行に -->
+            <div class="info-row price-row">
+                <label>現在値:</label>
+                <span>{{ formatPrice(stock.current_price) }}円</span>
+                <label style="margin-left: 15px;">前日比:</label>
+                <span :class="getDiffClass(stock.prev_diff)">
+                    {{ formatDiff(stock.prev_diff) }}円 ({{ formatPercent(stock.prev_diff_percent) }}%)
+                </span>
+            </div>
+            
+            <!-- 外部サイトリンクを1行に -->
+            <div class="info-row external-links">
+                <label>外部サイト:</label>
+                <div class="link-buttons">
+                    <a :href="getStockUrl('kabutan')" target="_blank" class="button">株探</a>
+                    <a :href="getStockUrl('minkabu')" target="_blank" class="button">みんかぶ</a>
+                    <a :href="getStockUrl('yahoo')" target="_blank" class="button">Y!</a>
+                </div>
+            </div>
+        </div>
+
+        <div class="favorites-area">
+            <div class="tabs">
+                <button 
+                    v-for="(tab, index) in favorites.tabs" 
+                    :key="index"
+                    :class="{ active: currentTabIndex === index }"
+                    @click="currentTabIndex = index"
+                >
+                    {{ tab.name }}
+                </button>
+                <button @click="addTab" class="add-tab">+ タブ</button>
+            </div>
+
+            <div class="sort-row">
+                <label>並び替え:</label>
+                <select v-model="sortBy" @change="sortStocks">
+                    <option value="code">コード順</option>
+                    <option value="name">会社名順</option>
+                    <option value="price">株価順</option>
+                    <option value="diff">前日比順</option>
+                    <option value="custom">カスタム</option>
+                </select>
+                <button @click="editMode = !editMode" class="edit-button" :class="{ active: editMode }">
+                    {{ editMode ? '編集を終了' : 'お気に入りを編集' }}
+                </button>
+            </div>
+
+            <table class="favorites-table">
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th>証券コード</th>
+                        <th>会社名</th>
+                        <th>現在値</th>
+                        <th>前日比</th>
+                        <th>前日比(%)</th>
+                        <th>外部サイト</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr v-for="(stock, index) in currentTabStocks" :key="stock.code">
+                        <td>≡</td>
+                        <td>{{ stock.code }}</td>
+                        <td>{{ stock.name }}</td>
+                        <td class="right">{{ formatPrice(stock.current_price) }}円</td>
+                        <td class="right" :class="getDiffClass(stock.prev_diff)">
+                            {{ formatDiff(stock.prev_diff) }}円
+                        </td>
+                        <td class="right" :class="getDiffClass(stock.prev_diff)">
+                            {{ formatPercent(stock.prev_diff_percent) }}%
+                        </td>
+                        <td>
+                            <div class="link-buttons">
+                                <a :href="getExternalUrl(stock.code, 'kabutan')" target="_blank" class="mini-button">株探</a>
+                                <a :href="getExternalUrl(stock.code, 'minkabu')" target="_blank" class="mini-button">みんかぶ</a>
+                                <a :href="getExternalUrl(stock.code, 'yahoo')" target="_blank" class="mini-button">Y!</a>
+                                <button v-if="editMode" @click="removeFromFavorites(stock.code)" class="delete-button">削除</button>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div class="status-bar">
+            <span>{{ status }}</span>
+        </div>
+    </div>
+    {% endraw %}
+
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.6.14/dist/vue.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+    <script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>

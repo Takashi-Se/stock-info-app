@@ -1,0 +1,184 @@
+/* スマホ向けスタイル */
+@media (max-width: 768px) {
+    /* 検索エリア */
+    .search-area {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .search-area label {
+        margin-bottom: 5px;
+    }
+    
+    .search-area input,
+    .search-area button {
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 5px;
+        margin-right: 0;
+    }
+    
+    /* 株価情報エリア */
+    .stock-info {
+        padding: 10px;
+    }
+    
+    /* 会社名と証券コードを1行に */
+    .info-row.company-row {
+        display: flex !important;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    
+    .info-row.company-row label {
+        width: auto;
+        margin-right: 5px;
+    }
+    
+    .info-row.company-row .code-display {
+        margin-right: 5px;
+        font-weight: bold;
+    }
+    
+    /* 株価と前日比を1行に */
+    .info-row.price-row {
+        display: flex !important;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    
+    .info-row.price-row label {
+        width: auto;
+        margin-right: 5px;
+    }
+    
+    /* 外部サイトリンクを1行に */
+    .info-row.external-links {
+        display: flex !important;
+        flex-wrap: wrap;
+        align-items: center;
+    }
+    
+    .info-row.external-links label {
+        width: auto;
+        margin-right: 5px;
+    }
+    
+    /* お気に入りボタンを調整 */
+    .fav-button {
+        margin-left: auto;
+        font-size: 0.8rem;
+        padding: 5px 8px;
+    }
+    
+    /* お気に入りタブ調整 */
+    .tabs {
+        overflow-x: auto;
+        -webkit-overflow-scrolling: touch;
+    }
+    
+    .tabs button {
+        padding: 8px 10px;
+        font-size: 0.9rem;
+    }
+    
+    .sort-row {
+        flex-direction: column;
+        align-items: flex-start;
+    }
+    
+    .sort-row select {
+        width: 100%;
+        margin-top: 5px;
+        margin-bottom: 5px;
+    }
+    
+    .edit-button {
+        width: 100%;
+    }
+    
+    /* リンクボタン調整 */
+    .button, .mini-button {
+        padding: 6px 10px;
+        font-size: 0.8rem;
+    }
+    
+    /* モバイル用テーブル変換 */
+    .favorites-table {
+        display: block;
+    }
+    
+    .favorites-table thead {
+        display: none; /* ヘッダー非表示 */
+    }
+    
+    .favorites-table tbody {
+        display: block;
+    }
+    
+    .favorites-table tr {
+        display: block;
+        margin-bottom: 20px;
+        border: 1px solid #eee;
+        border-radius: 5px;
+        padding: 10px;
+        background-color: #fafafa;
+    }
+    
+    .favorites-table td {
+        display: block;
+        border: none;
+        padding: 3px 10px;
+        text-align: left;
+    }
+    
+    /* 3行構造の調整 */
+    /* 1行目: 証券コード + 会社名 */
+    .favorites-table td:nth-child(1), /* ドラッグハンドル */
+    .favorites-table td:nth-child(2), /* 証券コード */
+    .favorites-table td:nth-child(3) { /* 会社名 */
+        display: inline-block;
+    }
+    
+    .favorites-table td:nth-child(1) {
+        width: 20px;
+        padding-left: 0;
+    }
+    
+    .favorites-table td:nth-child(2) {
+        font-weight: bold;
+        margin-right: 5px;
+    }
+    
+    /* 2行目: 現在値 + 前日比 */
+    .favorites-table td:nth-child(4), /* 現在値 */
+    .favorites-table td:nth-child(5), /* 前日比 */
+    .favorites-table td:nth-child(6) { /* 前日比% */
+        display: inline-block;
+    }
+    
+    .favorites-table td:nth-child(4):before {
+        content: "現在値: ";
+    }
+    
+    .favorites-table td:nth-child(5):before {
+        content: "前日比: ";
+        margin-left: 10px;
+    }
+    
+    /* 3行目: 外部サイト */
+    .favorites-table td:nth-child(7) {
+        display: block;
+        margin-top: 5px;
+    }
+    
+    .favorites-table td:nth-child(7):before {
+        content: "外部サイト: ";
+        display: inline-block;
+        margin-bottom: 5px;
+    }
+    
+    .favorites-table .link-buttons {
+        display: inline-block;
+    }
+}
